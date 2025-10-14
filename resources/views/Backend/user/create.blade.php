@@ -1,5 +1,3 @@
-@include('backend.dashboard.component.breadcrumb', ['title' => $config['seo']['create']['title']])
-
 <form action="" method="" class="box">
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
@@ -9,8 +7,7 @@
                     <div class="panel-title">Thông tin chung</div>
                     <div class="panel-description">
                         <p>- Nhập thông tin chung của người sử dụng</p>
-                        <p>- Lưu ý:Những trường đánh dấu <span class="text-danger">(*)</span> 
-                        là bắt buộc</p>
+                        <p>- Lưu ý: Những trường đánh dấu <span class="text-danger">(*)</span> là bắt buộc</p>
                     </div>
                 </div>
             </div>
@@ -31,8 +28,7 @@
                                         Email <span class="text-danger">(*)</span>
                                     </label>
                                     <input type="text" id="email" name="email" value=""
-                                           class="form-control"
-                                           placeholder="Nhập địa chỉ email" autocomplete="off">
+                                        class="form-control" placeholder="Nhập địa chỉ email" autocomplete="off">
                                 </div>
                             </div>
 
@@ -42,8 +38,7 @@
                                         Họ và tên <span class="text-danger">(*)</span>
                                     </label>
                                     <input type="text" id="name" name="name" value=""
-                                           class="form-control"
-                                           placeholder="Nhập họ và tên" autocomplete="off">
+                                        class="form-control" placeholder="Nhập họ và tên" autocomplete="off">
                                 </div>
                             </div>
                         </div>
@@ -69,8 +64,7 @@
                                         Ngày sinh
                                     </label>
                                     <input type="text" id="birthdate" name="birthdate" value=""
-                                           class="form-control"
-                                           placeholder="Nhập ngày sinh" autocomplete="off">
+                                        class="form-control" placeholder="Nhập ngày sinh" autocomplete="off">
                                 </div>
                             </div>
                         </div>
@@ -83,8 +77,7 @@
                                         Mật khẩu <span class="text-danger">(*)</span>
                                     </label>
                                     <input type="password" id="password" name="password" value=""
-                                           class="form-control"
-                                           placeholder="Nhập mật khẩu" autocomplete="off">
+                                        class="form-control" placeholder="Nhập mật khẩu" autocomplete="off">
                                 </div>
                             </div>
 
@@ -94,19 +87,20 @@
                                         Nhập lại mật khẩu <span class="text-danger">(*)</span>
                                     </label>
                                     <input type="password" id="re_password" name="re_password" value=""
-                                           class="form-control"
-                                           placeholder="Nhập lại mật khẩu" autocomplete="off">
+                                        class="form-control" placeholder="Nhập lại mật khẩu" autocomplete="off">
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Hàng 4: Ảnh đại diện -->
                         <div class="row mb15">
                             <div class="col-lg-12">
                                 <div class="form-row">
-                                    <label for="" class="control-label text-left">
-                                        Ảnh đại diện</label>
-                                    <input type="text"name="image" value=""
-                                           class="form-control"
-                                           placeholder="Nhập mật khẩu" autocomplete="off">
+                                    <label for="image" class="control-label text-left">
+                                        Ảnh đại diện
+                                    </label>
+                                    <input type="text" name="image" value="" class="form-control"
+                                        placeholder="Nhập mật khẩu" autocomplete="off">
                                 </div>
                             </div>
                         </div>
@@ -135,19 +129,20 @@
                     </div>
                     <div class="ibox-content">
 
-                        <!-- Hàng 1: Email + Họ tên -->
+                        <!-- Hàng 1: Thành phố -->
                         <div class="row mb15">
                             <div class="col-lg-6">
                                 <div class="form-row">
-                                    <label for="" class="control-label text-left">
-                                        Thành phố 
+                                    <label class="control-label text-left">
+                                        Thành phố
                                     </label>
-                                    <select name="province_id" class="form-control setupSelect2 province location" data-targer="districts>
+                                    <select name="province_id" class="form-control setupSelect2 province location"
+                                        data-target="districts">
                                         <option value="0">[Chọn Thành Phố]</option>
-                                        @if(@isset($province))
-                                        @foreach($province as $province)
-                                        <option value="{{ $province->code }}">{{ $province->name }}</option>
-                                        @endforeach
+                                        @if (isset($province))
+                                            @foreach ($province as $item)
+                                                <option value="{{ $item->code }}">{{ $item->name }}</option>
+                                            @endforeach
                                         @endif
                                     </select>
                                 </div>
@@ -155,52 +150,48 @@
 
                             <div class="col-lg-6">
                                 <div class="form-row">
-                                    <label for="" class="control-label text-left ">
+                                    <label class="control-label text-left ">
                                         Quận/Huyện
                                     </label>
-                                    <select name="district_id"class="form-control districts 
-                                    setupSelect2 location" data-targer="wards">
+                                    <select name="district_id" class="form-control districts">
                                         <option value="0">[Chọn Quận/Huyện]</option>
-
                                     </select>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Hàng 2: Nhóm thành viên + Ngày sinh -->
+                        <!-- Hàng 2: Phường/Xã + Địa chỉ -->
                         <div class="row mb15">
                             <div class="col-lg-6">
                                 <div class="form-row">
-                                    <label for="" class="control-label text-left">
-                                        Phường/Xã 
+                                    <label class="control-label text-left">
+                                        Phường/Xã
                                     </label>
-                                    <select name="wart_id"  class="form-control">
+                                    <select name="ward_id" class="form-control">
                                         <option value="0">[Chọn Phường/Xã]</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-row">
-                                    <label for="" class="control-label text-left">
+                                    <label class="control-label text-left">
                                         Địa Chỉ
                                     </label>
-                                    <input type="text"  name="address" value=""
-                                           class="form-control"
-                                           placeholder="Nhập địa chỉ" autocomplete="off">
+                                    <input type="text" name="address" value="" class="form-control"
+                                        placeholder="Nhập địa chỉ" autocomplete="off">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Hàng 3: Mật khẩu + Nhập lại mật khẩu -->
+                        <!-- Hàng 3: SĐT + Ghi chú -->
                         <div class="row mb15">
                             <div class="col-lg-6">
                                 <div class="form-row">
-                                    <label for="" class="control-label text-left">
+                                    <label class="control-label text-left">
                                         Số điện thoại
                                     </label>
-                                    <input type="text" name="phone" value=""
-                                           class="form-control"
-                                           placeholder="Nhập mật khẩu" autocomplete="off">
+                                    <input type="text" name="phone" value="" class="form-control"
+                                        placeholder="Nhập số điện thoại" autocomplete="off">
                                 </div>
                             </div>
 
@@ -209,9 +200,8 @@
                                     <label for="re_password" class="control-label text-left">
                                         Ghi Chú
                                     </label>
-                                    <input type="text" name="description" value=""
-                                           class="form-control"
-                                           placeholder="Nhập lại mật khẩu" autocomplete="off">
+                                    <input type="text" name="description" value="" class="form-control"
+                                        placeholder="Nhập ghi chú" autocomplete="off">
                                 </div>
                             </div>
                         </div>

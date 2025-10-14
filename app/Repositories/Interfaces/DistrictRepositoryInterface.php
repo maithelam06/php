@@ -11,4 +11,3 @@ interface DistrictRepositoryInterface
        public function all();
        public function findDistrictByProvinceId(int $province_id);
 }
-

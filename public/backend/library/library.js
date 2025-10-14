@@ -13,10 +13,7 @@
     MTL.select2 = () => {
         $('.setupSelect2').select2();
     }
-    MTL.province = () => {
-        
-    }
-
+   
     // Khi document sẵn sàng
     documentObj.ready(function () {
         MTL.switchery();

@@ -49,6 +49,7 @@ class UserController extends Controller
 
         
         $province = $this->provinceRepository->all();
+        
 
         
         $config = [
