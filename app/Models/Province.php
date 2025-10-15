@@ -16,6 +16,7 @@ class Province extends Model
     protected $primaryKey = 'code';
     public $incrementing = false;
     
+    
 
     public function districts() {
         return $this->hasMany(District::class, 'province_code','code');

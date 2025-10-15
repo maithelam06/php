@@ -2,34 +2,59 @@
     "use strict";
     var MTL = {};
 
-    MTL.province = () => {
-        $(document).on('change', '.province', function () {
+    MTL.getLocation = () => {
+        $(document).on('change', '.location', function () {
             let _this = $(this);
-            let province_id = _this.val();
-            $.ajax({
-                url: 'ajax/location/getLocation',           
-                type: 'GET',                 
-                data: {
-                    'province_id' : province_id
-                }, 
-                dataType: 'json',            
-                success: function (res) {
-                    $('.districts').html(res.html);
+            let option = {
+                'data': {
+                    'location_id': _this.val()
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
-                
-                    console.log('Lỗi: ' + textStatus + ' - ' + errorThrown);
-                    alert('Có lỗi xảy ra, vui lòng thử lại!');
-                }
-            });
+                'target': _this.attr('data-target')
+            }
+
+
+            MTL.sendDataTogetLocation(option)
+
 
         })
+    }
+
+    MTL.sendDataTogetLocation = (option) => {
+        $.ajax({
+            url: 'ajax/location/getLocation',
+            type: 'GET',
+            data: option,
+            dataType: 'json',
+            success: function (res) {
+                $('.' + option.target).html(res.html);
+
+                if (district_id != '' && option.target == 'districts') {
+                    $('.districts').val(district_id).trigger('change')
+                }
+
+                if (ward_id != '' && option.target == 'wards') {
+                    $('.wards').val(ward_id).trigger('change')
+                }
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+
+                console.log('Lỗi: ' + textStatus + ' - ' + errorThrown);
+                alert('Có lỗi xảy ra, vui lòng thử lại!');
+            }
+        });
+    }
+    MTL.loadCity = () => {
+        if (province_id != '') {
+            $(".province").val(province_id).trigger("change");
+        }
     }
 
 
     // Khi document sẵn sàng
     $(document).ready(function () {
-        MTL.province();
+        MTL.getLocation();
+        MTL.loadCity();
     });
 
 })(jQuery);

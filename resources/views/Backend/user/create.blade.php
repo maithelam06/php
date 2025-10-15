@@ -1,4 +1,15 @@
-<form action="" method="" class="box">
+@include('backend.dashboard.component.breadcrumb', ['title' => $config['seo']['create']['title']])
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+<form action="{{ route('user.store') }}" method="post" class="box">
+    @csrf
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             <!-- Cột trái -->
@@ -27,7 +38,7 @@
                                     <label for="email" class="control-label text-left">
                                         Email <span class="text-danger">(*)</span>
                                     </label>
-                                    <input type="text" id="email" name="email" value=""
+                                    <input type="text" id="email" name="email" value="{{ old('email') }}"
                                         class="form-control" placeholder="Nhập địa chỉ email" autocomplete="off">
                                 </div>
                             </div>
@@ -37,33 +48,41 @@
                                     <label for="name" class="control-label text-left">
                                         Họ và tên <span class="text-danger">(*)</span>
                                     </label>
-                                    <input type="text" id="name" name="name" value=""
+                                    <input type="text" id="name" name="name" value="{{ old('name') }}"
                                         class="form-control" placeholder="Nhập họ và tên" autocomplete="off">
                                 </div>
                             </div>
                         </div>
 
                         <!-- Hàng 2: Nhóm thành viên + Ngày sinh -->
+                        @php
+                            $userCatalogue = [
+                                'Chọn Nhóm Thành Viên',
+                                'Quản trị viên',
+                                'Cộng tác viên'
+                    ];
+                        @endphp
                         <div class="row mb15">
                             <div class="col-lg-6">
                                 <div class="form-row">
                                     <label for="user_catalogue_id" class="control-label text-left">
                                         Nhóm Thành Viên <span class="text-danger">(*)</span>
                                     </label>
-                                    <select name="user_catalogue_id" id="user_catalogue_id" class="form-control">
-                                        <option value="0">[Chọn Nhóm Thành Viên]</option>
-                                        <option value="1">Quản trị viên</option>
-                                        <option value="2">Cộng tác viên</option>
+                                    <select name="user_catalogue_id" id="user_catalogue_id" class="form-control setupSelect2">
+                                        @foreach ($userCatalogue as $key =>$item)
+                                        <option @if(old('user_catalogue_id')== $key) selected
+                                                @endif  value="{{ $key }}">{{ $item }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
 
                             <div class="col-lg-6">
                                 <div class="form-row">
-                                    <label for="birthdate" class="control-label text-left">
+                                    <label for="birthday" class="control-label text-left">
                                         Ngày sinh
                                     </label>
-                                    <input type="text" id="birthdate" name="birthdate" value=""
+                                    <input type="date" id="birthday" name="birthday" value="{{ old('birthday') }}"
                                         class="form-control" placeholder="Nhập ngày sinh" autocomplete="off">
                                 </div>
                             </div>
@@ -99,8 +118,8 @@
                                     <label for="image" class="control-label text-left">
                                         Ảnh đại diện
                                     </label>
-                                    <input type="text" name="image" value="" class="form-control"
-                                        placeholder="Nhập mật khẩu" autocomplete="off">
+                                    <input type="text" name="image" value="{{ old('image') }}" class="form-control input-image"
+                                        placeholder="" autocomplete="off" data-upload="Images">
                                 </div>
                             </div>
                         </div>
@@ -141,7 +160,8 @@
                                         <option value="0">[Chọn Thành Phố]</option>
                                         @if (isset($province))
                                             @foreach ($province as $item)
-                                                <option value="{{ $item->code }}">{{ $item->name }}</option>
+                                                <option @if(old('province_id')== $item->code) selected
+                                                @endif value="{{ $item->code }}">{{ $item->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -153,7 +173,8 @@
                                     <label class="control-label text-left ">
                                         Quận/Huyện
                                     </label>
-                                    <select name="district_id" class="form-control districts">
+                                    <select name="district_id" class="form-control districts setupSelect2 location"
+                                        data-target="wards">
                                         <option value="0">[Chọn Quận/Huyện]</option>
                                     </select>
                                 </div>
@@ -167,7 +188,7 @@
                                     <label class="control-label text-left">
                                         Phường/Xã
                                     </label>
-                                    <select name="ward_id" class="form-control">
+                                    <select name="ward_id" class="form-control setupSelect2 wards">
                                         <option value="0">[Chọn Phường/Xã]</option>
                                     </select>
                                 </div>
@@ -177,7 +198,7 @@
                                     <label class="control-label text-left">
                                         Địa Chỉ
                                     </label>
-                                    <input type="text" name="address" value="" class="form-control"
+                                    <input type="text" name="address" value="{{ old('address') }}" class="form-control"
                                         placeholder="Nhập địa chỉ" autocomplete="off">
                                 </div>
                             </div>
@@ -190,7 +211,7 @@
                                     <label class="control-label text-left">
                                         Số điện thoại
                                     </label>
-                                    <input type="text" name="phone" value="" class="form-control"
+                                    <input type="text" name="phone" value="{{ old('phone') }}" class="form-control"
                                         placeholder="Nhập số điện thoại" autocomplete="off">
                                 </div>
                             </div>
@@ -200,7 +221,7 @@
                                     <label for="re_password" class="control-label text-left">
                                         Ghi Chú
                                     </label>
-                                    <input type="text" name="description" value="" class="form-control"
+                                    <input type="text" name="description" value="{{ old('description') }}" class="form-control"
                                         placeholder="Nhập ghi chú" autocomplete="off">
                                 </div>
                             </div>
@@ -214,3 +235,9 @@
         </div>
     </div>
 </form>
+
+<script>
+    var province_id = '{{ old('province_id') }}'
+    var district_id = '{{ old('district_id') }}'
+    var ward_id = '{{ old('ward_id') }}'
+</script>

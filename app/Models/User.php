@@ -25,12 +25,14 @@ class User extends Authenticatable
         'address',
         'province_id',
         'district_id',
+        'ward_id',
         'address',
         'birthday',
         'image',
         'description',
         'user_agent',
         'ip',
+        'user-catalogue_id'
 
 
     ];
@@ -54,4 +56,5 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    
 }
