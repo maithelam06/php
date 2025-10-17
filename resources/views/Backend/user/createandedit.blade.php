@@ -8,7 +8,10 @@
         </ul>
     </div>
 @endif
-<form action="{{ route('user.store') }}" method="post" class="box">
+@php
+  $url = ($config['method']  == 'create')  ? route('user.store') : route('user.update', $user->id);
+@endphp
+<form action="{{ $url }}" method="post" class="box">
     @csrf
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
@@ -38,8 +41,9 @@
                                     <label for="email" class="control-label text-left">
                                         Email <span class="text-danger">(*)</span>
                                     </label>
-                                    <input type="text" id="email" name="email" value="{{ old('email') }}"
-                                        class="form-control" placeholder="Nhập địa chỉ email" autocomplete="off">
+                                    <input type="text" id="email" name="email"
+                                        value="{{ old('email', $user->email ?? '') }}" class="form-control"
+                                        placeholder="Nhập địa chỉ email" autocomplete="off">
                                 </div>
                             </div>
 
@@ -48,33 +52,31 @@
                                     <label for="name" class="control-label text-left">
                                         Họ và tên <span class="text-danger">(*)</span>
                                     </label>
-                                    <input type="text" id="name" name="name" value="{{ old('name') }}"
-                                        class="form-control" placeholder="Nhập họ và tên" autocomplete="off">
+                                    <input type="text" id="name" name="name"
+                                        value="{{ old('name', $user->name ?? '') }}" class="form-control"
+                                        placeholder="Nhập họ và tên" autocomplete="off">
                                 </div>
                             </div>
                         </div>
 
                         <!-- Hàng 2: Nhóm thành viên + Ngày sinh -->
+
                         @php
-                            $userCatalogue = [
-                                'Chọn Nhóm Thành Viên',
-                                'Quản trị viên',
-                                'Cộng tác viên'
-                    ];
+                            $userCatalogue = ['Chọn Nhóm Thành Viên', 'Quản trị viên', 'Cộng tác viên'];
+
                         @endphp
                         <div class="row mb15">
                             <div class="col-lg-6">
-                                <div class="form-row">
-                                    <label for="user_catalogue_id" class="control-label text-left">
-                                        Nhóm Thành Viên <span class="text-danger">(*)</span>
-                                    </label>
-                                    <select name="user_catalogue_id" id="user_catalogue_id" class="form-control setupSelect2">
-                                        @foreach ($userCatalogue as $key =>$item)
-                                        <option @if(old('user_catalogue_id')== $key) selected
-                                                @endif  value="{{ $key }}">{{ $item }}</option>
+                                <div class="form-row"> <label for="user_catalogue_id" class="control-label text-left">
+                                        Nhóm Thành Viên <span class="text-danger">(*)</span> </label> <select
+                                        name="user_catalogue_id" id="user_catalogue_id"
+                                        class="form-control setupSelect2">
+                                        @foreach ($userCatalogue as $key => $item)
+                                            <option
+                                                {{ $key == old('user_catalogue_id', isset($user->user_catalogue_id) ? $user->user_catalogue_id : '') ? 'selected' : '' }}
+                                                value="{{ $key }}">{{ $item }}</option>
                                         @endforeach
-                                    </select>
-                                </div>
+                                    </select> </div>
                             </div>
 
                             <div class="col-lg-6">
@@ -82,13 +84,15 @@
                                     <label for="birthday" class="control-label text-left">
                                         Ngày sinh
                                     </label>
-                                    <input type="date" id="birthday" name="birthday" value="{{ old('birthday') }}"
+                                    <input type="date" id="birthday" name="birthday"
+                                       value="{{ old('birthday', isset($user->birthday) ? date('Y-m-d', strtotime($user->birthday)) : '') }}"
                                         class="form-control" placeholder="Nhập ngày sinh" autocomplete="off">
                                 </div>
                             </div>
                         </div>
 
                         <!-- Hàng 3: Mật khẩu + Nhập lại mật khẩu -->
+                        @if($config['method']== 'create')
                         <div class="row mb15">
                             <div class="col-lg-6">
                                 <div class="form-row">
@@ -110,7 +114,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        @endif
                         <!-- Hàng 4: Ảnh đại diện -->
                         <div class="row mb15">
                             <div class="col-lg-12">
@@ -118,8 +122,9 @@
                                     <label for="image" class="control-label text-left">
                                         Ảnh đại diện
                                     </label>
-                                    <input type="text" name="image" value="{{ old('image') }}" class="form-control input-image"
-                                        placeholder="" autocomplete="off" data-upload="Images">
+                                    <input type="text" name="image" value="{{ old('image', $user->name ?? '') }}"
+                                        class="form-control input-image" placeholder="" autocomplete="off"
+                                        data-upload="Images">
                                 </div>
                             </div>
                         </div>
@@ -160,8 +165,8 @@
                                         <option value="0">[Chọn Thành Phố]</option>
                                         @if (isset($province))
                                             @foreach ($province as $item)
-                                                <option @if(old('province_id')== $item->code) selected
-                                                @endif value="{{ $item->code }}">{{ $item->name }}</option>
+                                                <option @if (old('province_id') == $item->code) selected @endif
+                                                    value="{{ $item->code }}">{{ $item->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -198,8 +203,8 @@
                                     <label class="control-label text-left">
                                         Địa Chỉ
                                     </label>
-                                    <input type="text" name="address" value="{{ old('address') }}" class="form-control"
-                                        placeholder="Nhập địa chỉ" autocomplete="off">
+                                    <input type="text" name="address" value="{{ old('address',($user->address) ?? '') }}"
+                                        class="form-control" placeholder="Nhập địa chỉ" autocomplete="off">
                                 </div>
                             </div>
                         </div>
@@ -211,8 +216,8 @@
                                     <label class="control-label text-left">
                                         Số điện thoại
                                     </label>
-                                    <input type="text" name="phone" value="{{ old('phone') }}" class="form-control"
-                                        placeholder="Nhập số điện thoại" autocomplete="off">
+                                    <input type="text" name="phone" value="{{ old('phone',($user->phone) ?? '') }}"
+                                        class="form-control" placeholder="Nhập số điện thoại" autocomplete="off">
                                 </div>
                             </div>
 
@@ -221,8 +226,8 @@
                                     <label for="re_password" class="control-label text-left">
                                         Ghi Chú
                                     </label>
-                                    <input type="text" name="description" value="{{ old('description') }}" class="form-control"
-                                        placeholder="Nhập ghi chú" autocomplete="off">
+                                    <input type="text" name="description" value="{{ old('description',($user->description) ?? '') }}"
+                                        class="form-control" placeholder="Nhập ghi chú" autocomplete="off">
                                 </div>
                             </div>
                         </div>
@@ -237,7 +242,7 @@
 </form>
 
 <script>
-    var province_id = '{{ old('province_id') }}'
-    var district_id = '{{ old('district_id') }}'
-    var ward_id = '{{ old('ward_id') }}'
+    var province_id = '{{ (isset($user->province_id )) ? $user->province_id  : old ('province_id')  }}'
+    var district_id = '{{ (isset($user->district_id )) ? $user->district_id  : old ('district_id')  }}'
+    var ward_id = '{{ (isset($user->ward_id )) ? $user->ward_id  : old ('ward_id')  }}'
 </script>
