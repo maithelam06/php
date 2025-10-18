@@ -28,11 +28,14 @@ class UserService implements UserServiceInterface
     ) {
         $this->userRepository = $userRepository;
     }
-
-
-    public function paginate()
+   
+    //lay danh sach bang ghi
+    public function paginate($request)
     {
-        $users = $this->userRepository->pagination(['id','name','email','phone','address','publish']);
+        $condition['keyword'] = addslashes($request->input('keyword'));
+        $perpage =$request->integer('perpage');
+
+        $users = $this->userRepository->pagination($this->paginateSelect(),$condition, [] ,['path' => 'user/index'],$perpage);
         return $users;
     }
 
@@ -104,6 +107,11 @@ class UserService implements UserServiceInterface
         $carbonDate = \Carbon\Carbon::createFromFormat('Y-m-d', $birthday);
         $birthday = $carbonDate->format('Y-m-d H:i:s');
         return $birthday;
+    }
+
+    //phân trang
+     public function paginateSelect() {
+        return ['id','name','email','phone','address','publish'];
     }
     
 }
