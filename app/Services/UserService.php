@@ -28,14 +28,14 @@ class UserService implements UserServiceInterface
     ) {
         $this->userRepository = $userRepository;
     }
-   
+
     //lay danh sach bang ghi
     public function paginate($request)
     {
         $condition['keyword'] = addslashes($request->input('keyword'));
-        $perpage =$request->integer('perpage');
+        $perpage = $request->integer('perpage');
 
-        $users = $this->userRepository->pagination($this->paginateSelect(),$condition, [] ,['path' => 'user/index'],$perpage);
+        $users = $this->userRepository->pagination($this->paginateSelect(), $condition, [], ['path' => 'user/index'], $perpage);
         return $users;
     }
 
@@ -61,7 +61,7 @@ class UserService implements UserServiceInterface
             return false;
         }
     }
-    
+
     //cap nhat bang ghi
     public function update($id, $request)
     {
@@ -83,8 +83,9 @@ class UserService implements UserServiceInterface
     }
 
     //xoa bang ghi
-    public function destroy($id) {
-         DB::beginTransaction();
+    public function destroy($id)
+    {
+        DB::beginTransaction();
         try {
             $user = $this->userRepository->delete($id);
 
@@ -97,8 +98,25 @@ class UserService implements UserServiceInterface
             die();
             return false;
         }
+    }
 
-        
+    public function updateStatus($post = [])
+    {
+        DB::beginTransaction();
+        try {
+            $payload[$post['field']] = (($post['value'] == 1)?0:1);
+      
+            $user = $this->userRepository->update($post['modelId'], $payload);
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log::error($e->getMessage());
+            echo $e->getMessage();
+            die();
+            return false;
+        }
     }
 
     //chuyen doi ngay thang
@@ -110,8 +128,8 @@ class UserService implements UserServiceInterface
     }
 
     //phân trang
-     public function paginateSelect() {
-        return ['id','name','email','phone','address','publish'];
+    public function paginateSelect()
+    {
+        return ['id', 'name', 'email', 'phone', 'address', 'publish'];
     }
-    
 }

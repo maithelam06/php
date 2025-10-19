@@ -16,11 +16,11 @@
             </div>
             <div class="action">
                 <div class="ul-flex uk-flex-middle">
-                    <select name="user_catalogue_id" class="form-control mr10">
+                    <select name="user_catalogue_id" class="form-control mr10 setupSelect2 ">
                         <option value="0" selected="selected">Chọn Nhóm Thành Viên</option>
                         <option value="1">Quản trị viên</option>
                     </select>
-                    <div class="uk-search uk-flex uk-flex-middle mr10">
+                    <div class="uk-search uk-flex uk-flex-middle mr10 ml10">
                         <div class="input-group">
                             <input type="text" name="keyword" value="{{ request('keyword') ?: old('keyword')  }}"
                                 placeholder="Nhập Từ khóa bạn muốn tìm kiếm..." class="form-control">
@@ -31,7 +31,7 @@
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('user.create') }}" class="btn btn-danger"><i class="fa fa-plus""></i>Thêm mới
+                    <a href="{{ route('user.create') }}" class="btn btn-danger"><i class="fa fa-plus"></i>Thêm mới
                         thành viên</a>
                 </div>
             </div>
