@@ -9,20 +9,27 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function __construct()
+    public function __construct() {}
+
+    public function changeStatus(Request $request)
     {
-        // constructor nếu cần
+        $post = $request->input();
+        $serviceInterfaceNamespace = '\App\Services\\' . ucfirst($post['model']) . 'Service';
+        if (class_exists($serviceInterfaceNamespace)) {
+            $serviceInstance = app($serviceInterfaceNamespace);
+        }
+
+        $falg =  $serviceInstance->updateStatus($post);
+        return response()->json(['falge' =>  $falg]);
     }
 
-   public function changeStatus(Request $request){
-    $post = $request->input();
-    $serviceInterfaceNamespace = '\App\Services\\' . ucfirst($post['model']) . 'Service';
-    if (class_exists($serviceInterfaceNamespace)) {
-        $serviceInstance = app($serviceInterfaceNamespace);
+    public function changeStatusAll(Request $request){
+        $post = $request->input();
+        $serviceInterfaceNamespace = '\App\Services\\' . ucfirst($post['model']) . 'Service';
+        if (class_exists($serviceInterfaceNamespace)) {
+            $serviceInstance = app($serviceInterfaceNamespace);
+        }
+        $flag = $serviceInstance->updateStatusAll($post);
+        return response()->json(['falge' =>  $flag]);
     }
-
-    $falg =  $serviceInstance->updateStatus($post);
-
-    return response()->json(['falge' =>  $falg]);
-}
 }

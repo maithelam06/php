@@ -118,7 +118,24 @@ class UserService implements UserServiceInterface
             return false;
         }
     }
+    public function updateStatusAll($post)
+    {
+           DB::beginTransaction();
+        try {
+            $payload[$post['field']] = $post['value'];
+             $flag = $this->userRepository->updateByWhereIn('id',$post['id'],$payload);
+             
 
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log::error($e->getMessage());
+            echo $e->getMessage();
+            die();
+            return false;
+        }
+    }
     //chuyen doi ngay thang
     private function convertBirthdayDate($birthday = '')
     {

@@ -46,16 +46,26 @@ class BaseRepository implements BaseRepositoryInterface
         $model = $this->model->create($payload);
         return $model->fresh();
     }
+
+
     public function update(int $id = 0, array $payload = [])
     {
         $model = $this->findById($id);
         return $model->update($payload);
     }
 
+     public function updateByWhereIn( string $whereInField = '', array $WherIn = [], array $payload = []) {
+       return $this->model->whereIn($whereInField,$WherIn)->update($payload);
+
+     }
+
+
     public function delete(int $id = 0)
     {
         return $this->findById($id)->delete();
     }
+
+
     public function forceDelete(int $id = 0)
     {
         return $this->findById($id)->forceDelete();
@@ -74,4 +84,6 @@ class BaseRepository implements BaseRepositoryInterface
     ) {
         return $this->model->select($column)->with($relation)->findOrFail($modelId);
     }
+
+    
 }
