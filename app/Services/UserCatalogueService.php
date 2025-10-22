@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
-use App\Services\Interfaces\UserServiceInterface;
+use App\Services\Interfaces\UserCatalogueServiceInterface;
 use PhpParser\Node\Expr\FuncCall;
-use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
+use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -16,28 +17,34 @@ use Illuminate\Support\Facades\Hash;
 
 
 /**
- * Class UserService
+ * Class UserCatlogueService
  * @package App\Services
  */
-class UserService implements UserServiceInterface
+class UserCatalogueService implements UserCatalogueServiceInterface         
 {
-    //protected $userRepository;
-    protected $userRepository;
-    public function __construct(
-        UserRepository $userRepository
-    ) {
-        $this->userRepository = $userRepository;
+     protected $userCatalogueRepository;
+
+    public function __construct(UserCatalogueRepository $userCatalogueRepository)
+    {
+        $this->userCatalogueRepository = $userCatalogueRepository;
     }
 
-    //lay danh sach bang ghi
+    // Lấy danh sách bản ghi
     public function paginate($request)
     {
         $condition['keyword'] = addslashes($request->input('keyword'));
-         $condition['publish'] =  $request->integer('publish');
-         
+        $condition['publish'] = $request->integer('publish');
         $perpage = $request->integer('perpage');
 
-        $users = $this->userRepository->pagination($this->paginateSelect(), $condition, [], ['path' => 'user/index'], $perpage);
+        $users = $this->userCatalogueRepository->pagination(
+            $this->paginateSelect(),
+            $condition,
+            [],
+            ['path' => 'user/catalogue/index'],
+            $perpage
+        );
+        
+
         return $users;
     }
 
@@ -89,7 +96,7 @@ class UserService implements UserServiceInterface
     {
         DB::beginTransaction();
         try {
-            $user = $this->userRepository->forceDelete($id);
+            $user = $this->userRepository->delete($id);
 
             DB::commit();
             return true;

@@ -5,11 +5,11 @@
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <h5>{{ $config['seo']['index']['tableHeading'] }}</h5> {{-- tiêu đề --}}
-                @include('backend.user.component.toolbox')
+                @include('backend.user.user.component.toolbox')
             </div>
             <div class="ibox-content">
-                @include('backend.user.component.filter')
-                @include('backend.user.component.table')
+                @include('backend.user.user.component.filter')
+                @include('backend.user.user.component.table')
             </div>
         </div>
     </div>

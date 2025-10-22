@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('fullname', 50)->nullable();
             $table->string('phone', 20)->nullable();
-            $table->string('provice_id', 10)->nullable();
+            $table->string('province_id', 10)->nullable();
             $table->string('district_id', 10)->nullable();
-            $table->string('wart_id', 10)->nullable();
+            $table->string('ward_id', 10)->nullable();
             $table->string('address')->nullable();
             $table->dateTime('birthday')->nullable();
             $table->string('image')->nullable();

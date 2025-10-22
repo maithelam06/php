@@ -19,8 +19,8 @@ class DashboardController extends Controller
             $serviceInstance = app($serviceInterfaceNamespace);
         }
 
-        $falg =  $serviceInstance->updateStatus($post);
-        return response()->json(['falge' =>  $falg]);
+        $flag =  $serviceInstance->updateStatus($post);
+        return response()->json(['flag' =>  $flag]);
     }
 
     public function changeStatusAll(Request $request){
@@ -29,7 +29,8 @@ class DashboardController extends Controller
         if (class_exists($serviceInterfaceNamespace)) {
             $serviceInstance = app($serviceInterfaceNamespace);
         }
+
         $flag = $serviceInstance->updateStatusAll($post);
-        return response()->json(['falge' =>  $flag]);
+        return response()->json(['flag' =>  $flag]);
     }
 }

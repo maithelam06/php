@@ -161,4 +161,251 @@ table strong{
     height: 15px;
 }
 
+.switchery-small {
+    border-radius: 20px;
+    height: 20px;
+    width: 33px;
+}
+
+.switchery-small > small {
+    height: 20px;
+    width: 20px;
+}
+
+
+
+/* filter */
+.filter {
+    background: #f3f3f4;
+    padding: 15px 20px;
+    border-radius: 0;
+    margin-bottom: 0;
+}
+
+.ul-flex {
+    display: flex;
+    align-items: center;
+}
+
+.uk-flex-middle {
+    align-items: center;
+}
+
+.uk-flex-space-between {
+    justify-content: space-between;
+}
+
+/* Perpage Dropdown */
+.perpage select {
+    min-width: 140px;
+    height: 36px;
+    padding: 6px 12px;
+    border: 1px solid #e5e6e7;
+    border-radius: 3px;
+    background: #fff;
+    font-size: 13px;
+    color: #676a6c;
+    cursor: pointer;
+}
+
+.perpage select:focus {
+    outline: none;
+    border-color: #1ab394;
+}
+
+/* Action Section */
+.action .ul-flex {
+    gap: 8px;
+}
+
+.action {
+    display: flex;
+    align-items: center;
+}
+
+/* Select Dropdowns - Tình trạng & Nhóm Thành Viên */
+.setupSelect2 {
+    min-width: 180px;
+    width: 180px;
+    height: 36px;
+    padding: 6px 12px;
+    border: 1px solid #e5e6e7;
+    border-radius: 3px;
+    background: #fff;
+    font-size: 13px;
+    color: #676a6c;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.setupSelect2:focus {
+    outline: none;
+    border-color: #1ab394;
+    box-shadow: none;
+}
+
+/* Search Input Group */
+.uk-search {
+    flex: 0 0 auto;
+    width: auto;
+    margin: 0 8px 0 0;
+}
+
+.uk-search .input-group {
+    display: flex;
+    width: auto;
+    align-items: stretch;
+}
+
+.uk-search input[type="text"] {
+    width: 200px;
+    height: 36px;
+    padding: 6px 12px;
+    border: 1px solid #e5e6e7;
+    border-right: none;
+    border-radius: 3px 0 0 3px;
+    font-size: 13px;
+    background: #fff;
+    color: #676a6c;
+    margin: 0;
+}
+
+.uk-search input[type="text"]:focus {
+    outline: none;
+    border-color: #1ab394;
+}
+
+.uk-search input[type="text"]::placeholder {
+    color: #999;
+    font-size: 13px;
+}
+
+.uk-search .input-group-btn {
+    display: flex;
+    margin: 0;
+}
+
+.uk-search .input-group-btn button {
+    height: 36px;
+    padding: 6px 12px;
+    background: #1ab394;
+    color: #fff;
+    border: none;
+    border-radius: 0 3px 3px 0;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.3s ease;
+    margin: 0;
+}
+
+.uk-search .input-group-btn button:hover {
+    background: #18a689;
+}
+
+/* Add New Button */
+.btn-danger {
+    height: 36px;
+    padding: 6px 16px;
+    background: #ed5565;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    transition: background 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-danger:hover {
+    background: #da4453;
+    color: #fff;
+}
+
+.btn-danger i {
+    font-size: 12px;
+}
+
+/* Utility Classes */
+.mr10 {
+    margin-right: 10px;
+}
+
+.ml10 {
+    margin-left: 10px;
+}
+
+.mb0 {
+    margin-bottom: 0;
+}
+
+.form-control {
+    transition: border-color 0.2s ease;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+    .ul-flex.uk-flex-space-between {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .action .ul-flex {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 1200px) {
+    .ul-flex.uk-flex-space-between {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .action .ul-flex {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .setupSelect2,
+    .uk-search {
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .uk-search input[type="text"] {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .filter {
+        padding: 12px 15px;
+    }
+    
+    .action .ul-flex {
+        gap: 8px;
+    }
+    
+    .perpage select,
+    .setupSelect2,
+    .uk-search input[type="text"],
+    .uk-search .input-group-btn button,
+    .btn-danger {
+        font-size: 12px;
+        height: 34px;
+    }
+}
+
+
+
+/* thêm thành viên */
+
+
 

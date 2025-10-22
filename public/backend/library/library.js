@@ -7,7 +7,7 @@
     // Khởi tạo switchery
     MTL.switchery = () => {
         $('.js-switch').each(function () {
-            var switchery = new Switchery(this, { color: '#1AB394' });
+            new Switchery(this, { color: '#1AB394', size: 'small' });
         })
     }
     MTL.select2 = () => {
@@ -81,10 +81,8 @@
         }
     }
 
-    MTL.allChecked = () => {
-        let allChecked = $('.checkBoxItem:checked').length === $('.checkBoxItem').length;
-        $('#checkAll').prop('checked', allChecked);
-    }
+
+
     MTL.changeStatusAll = () => {
         if ($('.changeStatusAll').length) {
             $(document).on('click', '.changeStatusAll', function (e) {
@@ -92,7 +90,7 @@
                 let id = []
                 $('.checkBoxItem:checked').each(function () {
                     let checkBox = $(this)
-                    if (checkBox.is(':checked')) {
+                    if (checkBox.prop('checked')) {
                         id.push(checkBox.val())
                     }
                 })
@@ -100,7 +98,7 @@
                     'value': _this.attr('data-value'),
                     'model': _this.attr('data-model'),
                     'field': _this.attr('data-field'),
-                    'id'   : id,
+                    'id': id,
                     '_token': _token
                 }
                 $.ajax({
@@ -109,27 +107,36 @@
                     data: option,
                     dataType: 'json',
                     success: function (res) {
-                        if(res.flag == true) {
+                        if (res.flag == true) {
                             let cssActive1 = 'background-color: rgb(26, 179, 148); border-color: rgb(26, 179, 148); box-shadow: rgb(26, 179, 148) 0px 0px 0px 16px inset; transition: border 0.4s, box-shadow 0.4s, background-color 1.2s;';
-                             let cssActive2 = 'left: 20px; background-color: rgb(255, 255, 255); transition: background-color 0.4s, left 0.2s;';
-                            if(option.value == 1) {
-                                for(let i=0; i < id.length; i++) {
-                                  $('.js-switch' + id[i]).find('span.switchery').attr('style', cssActive1).find('small').attr('style', cssActive2);
+                            let cssActive2 = 'left: 13px; background-color: rgb(255, 255, 255); transition: background-color 0.4s, left 0.2s;';
+                            let cssUnactive = 'background-color: rgb(255, 255, 255); border-color: rgb(223, 223, 223); box-shadow: rgb(223, 223, 223) 0px 0px 0px 0px inset; transition: border 0.4s, box-shadow 0.4s, background-color 1.2s;';
+                            let cssUnActive2 = 'left: 0px; background-color: rgb(255, 255, 255); transition: background-color 0.4s, left 0.2s;';
+
+                            for (let i = 0; i < id.length; i++) {
+                                let input = $('.js-switch-' + id[i]).find('input.js-switch');
+                                let span = $('.js-switch-' + id[i]).find('span.switchery');
+
+                                if (option.value == 1) {
+                                    input.prop('checked', true);   // ✅ Bật trạng thái thực
+                                    span.attr('style', cssActive1).find('small').attr('style', cssActive2);
+                                } else if (option.value == 0) {
+                                    input.prop('checked', false);  // ✅ Tắt trạng thái thực
+                                    span.attr('style', cssUnactive).find('small').attr('style', cssUnActive2);
                                 }
                             }
                         }
-                        
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-
-                        console.log('Lỗi: ' + textStatus + ' - ' + errorThrown);
                     }
                 });
-
                 e.preventDefault();
-
             })
         }
+    }
+
+
+    MTL.allChecked = () => {
+        let allChecked = $('.checkBoxItem:checked').length === $('.checkBoxItem').length;
+        $('#checkAll').prop('checked', allChecked);
     }
 
     // Khi document sẵn sàng
@@ -139,7 +146,6 @@
         MTL.changerStatus();
         MTL.checkAll();
         MTL.checkBoxItem();
-        MTL.allChecked();
         MTL.changeStatusAll();
     });
 

@@ -29,4 +29,35 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         // return User::paginate(15);
     }
 
+    public function pagination(
+        array $column = ['*'],
+        array $condition = [],
+        array $join = [],
+        array $extend = [],
+        int $perpage = 1
+        
+    ) {
+      
+        $query = $this->model
+            ->select($column)
+            ->where(function ($query) use ($condition) {
+                if (isset($condition['keyword']) && !empty($condition['keyword'])) {
+                    $query->where('name', 'like', '%' . $condition['keyword'] . '%')
+                    ->orWhere('email', 'like', '%' . $condition['keyword'] . '%')
+                    ->orWhere('address', 'like', '%' . $condition['keyword'] . '%')
+                    ->orWhere('phone', 'like', '%' . $condition['keyword'] . '%');
+                }
+               
+                if (isset($condition['publish']) && $condition['publish'] != -1) {
+                    $query->where('publish', '=', $condition['publish']);
+                }
+                return $query;
+            });
+        if (!empty($join)) {
+            $query->join(...$join);
+        }
+        return $query->paginate($perpage)->withQueryString()->withPath(env('APP_URL') . $extend['path']);
+    }
+
+
 }

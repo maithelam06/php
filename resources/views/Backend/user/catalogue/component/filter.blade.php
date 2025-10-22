@@ -16,6 +16,17 @@
             </div>
             <div class="action">
                 <div class="ul-flex uk-flex-middle">
+                    @php
+                    $publishArray = ['Không xuất bản', 'Xuất bản'];
+                     $publish = request('publish') ?: old('publish');
+                    @endphp
+                    <select name="publish" class="form-control mr10 setupSelect2 ">
+                        <option value="-1" selected="selected">Chọn Tình trạng</option>
+                        @foreach ($publishArray as $key => $val)
+                        <option  {{ $publish == $key ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
+                        @endforeach
+                         </select>
+
                     <select name="user_catalogue_id" class="form-control mr10 setupSelect2 ">
                         <option value="0" selected="selected">Chọn Nhóm Thành Viên</option>
                         <option value="1">Quản trị viên</option>
