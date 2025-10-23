@@ -5,8 +5,10 @@
                 <input type="checkbox" id="checkAll" class="input-checkBox">
             </th>
             <th style="width:90px" class="text-center">Ảnh</th>
-            <th>Tên Nhóm Thành Viên</th>
-            {{-- <th class="text-center" style="width: 120px;">Tình trạng</th> --}}
+            <th >Tên Nhóm Thành Viên</th>
+            <th class="text-center">Số Thành Viên</th>
+            <th>Mô Tả</th>
+            <th class="text-center" style="width: 120px;">Tình trạng</th>
             <th class="text-center" style="width: 120px;">Thao Tác</th>
         </tr>
     </thead>
@@ -25,22 +27,24 @@
                         </span>
                     </td>
                     <td>{{ $userCatalogue->name }}</td>
-                    {{-- <td class="text-center js-switch-{{ $user->id }}">
+                   <td> {{ $userCatalogue->users_count }} người </td> 
+                    <td>{{ $userCatalogue->description }}</td>
+                    <td class="text-center js-switch-{{ $userCatalogue->id }}">
                         <input type="checkbox" 
                                value="{{ $userCatalogue->publish }}" 
                                class="js-switch status" 
                                data-field="publish" 
-                               data-model="User" 
-                               data-modelid="{{ $user->id }}"
-                               {{ $userCatalogue->publish == 1 ? 'checked' : '' }}>
-                    </td> --}}
+                               data-model="UserCatalogue" 
+                               data-modelid="{{ $userCatalogue->id }}"
+                               {{ $userCatalogue->publish == 2 ? 'checked' : '' }}>
+                    </td>
                     <td class="text-center">
-                        <a href="{{ route('user.edit', $userCatalogue->id) }}" 
+                        <a href="{{ route('user.catalogue.edit', $userCatalogue->id) }}" 
                            class="btn btn-success btn-sm" 
                            title="Sửa">
                            <i class="fa fa-edit"></i>
                         </a>
-                        <a href="{{ route('user.delete', $userCatalogue->id) }}" 
+                        <a href="{{ route('user.catalogue.delete', $userCatalogue->id) }}" 
                            class="btn btn-danger btn-sm" 
                            title="Xóa" 
                            onclick="return confirm('Bạn có chắc muốn xóa thành viên này?')">

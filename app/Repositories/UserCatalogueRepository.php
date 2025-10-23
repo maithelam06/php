@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use PhpParser\Node\Expr\FuncCall;
-use App\Models\User;
+use App\Models\UserCatalogue;
 use App\Repositories\Interfaces\UserCatalogueRepositoryInterface;
 use App\Repositories\BaseRepository;
  
@@ -20,7 +20,7 @@ class UserCatalogueRepository extends BaseRepository implements UserCatalogueRep
      protected $model; 
        //nhớ truyền bảng cho đúng
       public function __construct(
-        User $model //nhớ truyền bảng cho đúng district
+        UserCatalogue $model //nhớ truyền bảng cho đúng district
       ){
         $this->model = $model;
       }

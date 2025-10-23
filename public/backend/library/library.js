@@ -117,10 +117,10 @@
                                 let input = $('.js-switch-' + id[i]).find('input.js-switch');
                                 let span = $('.js-switch-' + id[i]).find('span.switchery');
 
-                                if (option.value == 1) {
+                                if (option.value == 2) {
                                     input.prop('checked', true);   // ✅ Bật trạng thái thực
                                     span.attr('style', cssActive1).find('small').attr('style', cssActive2);
-                                } else if (option.value == 0) {
+                                } else if (option.value == 1) {
                                     input.prop('checked', false);  // ✅ Tắt trạng thái thực
                                     span.attr('style', cssUnactive).find('small').attr('style', cssUnActive2);
                                 }

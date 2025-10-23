@@ -32,20 +32,18 @@ class UserCatalogueService implements UserCatalogueServiceInterface
     // Lấy danh sách bản ghi
     public function paginate($request)
     {
+        
         $condition['keyword'] = addslashes($request->input('keyword'));
         $condition['publish'] = $request->integer('publish');
         $perpage = $request->integer('perpage');
 
-        $users = $this->userCatalogueRepository->pagination(
+        $userCatalogues = $this->userCatalogueRepository->pagination(
             $this->paginateSelect(),
-            $condition,
-            [],
+            $condition,[],
             ['path' => 'user/catalogue/index'],
-            $perpage
+            $perpage,['users']
         );
-        
-
-        return $users;
+        return $userCatalogues;
     }
 
     //them moi bang ghi
@@ -53,12 +51,8 @@ class UserCatalogueService implements UserCatalogueServiceInterface
     {
         DB::beginTransaction();
         try {
-            $payload = $request->except(['_token', 'send', 're_password']);
-            $payload['birthday'] = $this->convertBirthdayDate($payload['birthday']);
-
-
-            $payload['password'] = Hash::make($payload['password']);
-            $user = $this->userRepository->create($payload);
+            $payload = $request->except(['_token', 'send']);
+            $user = $this->userCatalogueRepository->create($payload);
 
             DB::commit();
             return true;
@@ -78,8 +72,8 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         try {
 
             $payload = $request->except(['_token', 'send']);
-            $payload['birthday'] = $this->convertBirthdayDate($payload['birthday']);
-            $user = $this->userRepository->update($id, $payload);
+
+            $user = $this->userCatalogueRepository->update($id, $payload);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -96,7 +90,7 @@ class UserCatalogueService implements UserCatalogueServiceInterface
     {
         DB::beginTransaction();
         try {
-            $user = $this->userRepository->delete($id);
+            $user = $this->userCatalogueRepository->delete($id);
 
             DB::commit();
             return true;
@@ -113,9 +107,9 @@ class UserCatalogueService implements UserCatalogueServiceInterface
     {
         DB::beginTransaction();
         try {
-            $payload[$post['field']] = (($post['value'] == 1)?0:1);
+            $payload[$post['field']] = (($post['value'] == 1)?2:1);
       
-            $user = $this->userRepository->update($post['modelId'], $payload);
+            $user = $this->userCatalogueRepository->update($post['modelId'], $payload);
 
             DB::commit();
             return true;
@@ -133,7 +127,7 @@ class UserCatalogueService implements UserCatalogueServiceInterface
            DB::beginTransaction();
         try {
             $payload[$post['field']] = $post['value'];
-            $flag = $this->userRepository->updateByWhereIn('id',$post['id'],$payload);
+            $flag = $this->userCatalogueRepository->updateByWhereIn('id',$post['id'],$payload);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -156,6 +150,6 @@ class UserCatalogueService implements UserCatalogueServiceInterface
     //phân trang
     public function paginateSelect()
     {
-        return ['id', 'name', 'email', 'phone', 'address', 'publish'];
+        return ['id', 'name','description','publish'];
     }
 }
