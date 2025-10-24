@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Services\Interfaces\UserCatalogueServiceInterface;
 use PhpParser\Node\Expr\FuncCall;
 use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
-
+use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -20,28 +20,34 @@ use Illuminate\Support\Facades\Hash;
  * Class UserCatlogueService
  * @package App\Services
  */
-class UserCatalogueService implements UserCatalogueServiceInterface         
+class UserCatalogueService implements UserCatalogueServiceInterface
 {
-     protected $userCatalogueRepository;
+    protected $userCatalogueRepository;
+    protected $userRepository;
 
-    public function __construct(UserCatalogueRepository $userCatalogueRepository)
-    {
+    public function __construct(
+        UserCatalogueRepository $userCatalogueRepository,
+        UserRepository $userRepository
+    ) {
         $this->userCatalogueRepository = $userCatalogueRepository;
+        $this->userRepository = $userRepository;
     }
 
     // Lấy danh sách bản ghi
     public function paginate($request)
     {
-        
+
         $condition['keyword'] = addslashes($request->input('keyword'));
         $condition['publish'] = $request->integer('publish');
         $perpage = $request->integer('perpage');
 
         $userCatalogues = $this->userCatalogueRepository->pagination(
             $this->paginateSelect(),
-            $condition,[],
+            $condition,
+            [],
             ['path' => 'user/catalogue/index'],
-            $perpage,['users']
+            $perpage,
+            ['users']
         );
         return $userCatalogues;
     }
@@ -107,9 +113,9 @@ class UserCatalogueService implements UserCatalogueServiceInterface
     {
         DB::beginTransaction();
         try {
-            $payload[$post['field']] = (($post['value'] == 1)?2:1);
-      
+            $payload[$post['field']] = (($post['value'] == 1) ? 2 : 1);
             $user = $this->userCatalogueRepository->update($post['modelId'], $payload);
+            $this->changeUserStatus($post,  $payload[$post['field']] );
 
             DB::commit();
             return true;
@@ -124,10 +130,33 @@ class UserCatalogueService implements UserCatalogueServiceInterface
 
     public function updateStatusAll($post)
     {
-           DB::beginTransaction();
+        DB::beginTransaction();
         try {
             $payload[$post['field']] = $post['value'];
-            $flag = $this->userCatalogueRepository->updateByWhereIn('id',$post['id'],$payload);
+            $flag = $this->userCatalogueRepository->updateByWhereIn('id', $post['id'], $payload);
+            $this->changeUserStatus($post,$post['value']);
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log::error($e->getMessage());
+            echo $e->getMessage();
+            die();
+            return false;
+        }
+    }
+    private function changeUserStatus($post, $value)
+    {
+        DB::beginTransaction();
+        try {
+            $array = [];
+            if (isset($post['modelId'])) {
+                $array[] = $post['modelId'];
+            } else {
+                $array = $post['id'];
+            }
+            $payload[$post['field']] = $value;
+            $this->userRepository->updateByWhereIn('user_catalogue_id', $array,  $payload);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -150,6 +179,6 @@ class UserCatalogueService implements UserCatalogueServiceInterface
     //phân trang
     public function paginateSelect()
     {
-        return ['id', 'name','description','publish'];
+        return ['id', 'name', 'description', 'publish'];
     }
 }

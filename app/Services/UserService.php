@@ -149,6 +149,6 @@ class UserService implements UserServiceInterface
     //phân trang
     public function paginateSelect()
     {
-        return ['id', 'name', 'email', 'phone', 'address', 'publish'];
+        return ['id', 'name', 'email', 'phone', 'address', 'publish','user_catalogue_id'];
     }
 }
