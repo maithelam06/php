@@ -19,10 +19,19 @@ class UpdateLanguageRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+   public function rules(): array
     {
         return [
-            //
+            'name' => 'required',
+            'canonical'  => 'required|unique:languages,canonical,'.$this->id.'',
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Bạn chưa tên ngôn ngữ ',
+            'canonical.required' => 'Bạn chưa nhập từ khóa của ngông ngữ',
+            'canonical.unique' => 'Từ khóa đã tồn tại'
         ];
     }
 }

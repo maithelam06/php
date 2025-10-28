@@ -26,80 +26,68 @@ class UserController extends Controller
         UserService $userService,
         ProvinceRepository $provinceRepository,
         UserRepository $userRepository
-    ){
+    ) {
         $this->userService = $userService;
         $this->provinceRepository = $provinceRepository;
         $this->userRepository = $userRepository;
     }
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $users = $this->userService->paginate($request);
 
         // $users = User::paginate(15);
-        
+
         $config =  [
             'js' => [
                 'Backend/js/plugins/switchery/switchery.js',
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js'
             ],
-            'css' =>[
+            'css' => [
                 'Backend/css/plugins/switchery/switchery.css',
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css'
             ]
-            ];
+        ];
         $config['seo'] = config('apps.user');
         // $config['method'] = 'create';
         $template = 'Backend.user.user.index';
-        return view('backend.dashboard.layout',compact(
+        return view('backend.dashboard.layout', compact(
             'template',
-             'config',
-             'users',
+            'config',
+            'users',
         ));
     }
 
-    public function create() {
+    public function create()
+    {
         $province = $this->provinceRepository->all();
-        $config = [
-            'css' => [
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css'
-            ],
-            'js' => [
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
-                'backend/library/location.js',
-            ]
-        ];
+        $config = $this->config();
         $config['seo'] = config('apps.user');
-         $config['method'] = 'create'; 
+        $config['method'] = 'create';
         $template = 'backend.user.user.createandedit';
-        return view('backend.dashboard.layout',compact(
+        return view('backend.dashboard.layout', compact(
             'template',
             'config',
             'province'
         ));
     }
 
-    public function store(StoreUserRequest $request) {
-       if($this->userService->create($request)){
-         return redirect()->route('user.index')->with('success', 'Thêm mới bản ghi thành công');
-       } 
-       return redirect()->route('user.index')->with('error', 'Thêm mới bản ghi không thành công.Hãy thử lại sau');
+    public function store(StoreUserRequest $request)
+    {
+        if ($this->userService->create($request)) {
+            return redirect()->route('user.index')->with('success', 'Thêm mới bản ghi thành công');
+        }
+        return redirect()->route('user.index')->with('error', 'Thêm mới bản ghi không thành công.Hãy thử lại sau');
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $user = $this->userRepository->findById($id);
         $province = $this->provinceRepository->all();
-        $config = [
-            'css' => [
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css'
-            ],
-            'js' => [
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
-                'backend/library/location.js',
-            ]
-        ];
+        $config = $this->config();
         $config['seo'] = config('apps.user');
         $config['method'] = 'edit';
         $template = 'backend.user.user.createandedit';
-        return view('backend.dashboard.layout',compact(
+        return view('backend.dashboard.layout', compact(
             'template',
             'config',
             'province',
@@ -107,33 +95,47 @@ class UserController extends Controller
         ));
     }
 
-   public function update($id, UpdateUserRequest $request) {
-    if($this->userService->update($id,$request)){
-         return redirect()->route('user.index')->with('success', 'Cập nhật bản ghi thành công');
-       } 
-       return redirect()->route('user.index')->with('error', 'Cập nhật bản ghi không thành công.Hãy thử lại sau');
+    public function update($id, UpdateUserRequest $request)
+    {
+        if ($this->userService->update($id, $request)) {
+            return redirect()->route('user.index')->with('success', 'Cập nhật bản ghi thành công');
+        }
+        return redirect()->route('user.index')->with('error', 'Cập nhật bản ghi không thành công.Hãy thử lại sau');
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $config['seo'] = config('apps.user');
         $user = $this->userRepository->findById($id);
         $template = 'backend.user.user.delete';
-        return view('backend.dashboard.layout',compact(
+        return view('backend.dashboard.layout', compact(
             'template',
             'user',
             'config'
         ));
     }
 
-   public function destroy($id)
-{
-    if ($this->userService->destroy($id)) {
-        return redirect()->route('user.index')->with('success', 'Xóa bản ghi thành công');
+    public function destroy($id)
+    {
+        if ($this->userService->destroy($id)) {
+            return redirect()->route('user.index')->with('success', 'Xóa bản ghi thành công');
+        }
+
+        return redirect()->route('user.index')->with('error', 'Xóa bản ghi không thành công. Hãy thử lại sau');
     }
 
-    return redirect()->route('user.index')->with('error', 'Xóa bản ghi không thành công. Hãy thử lại sau');
+    private function config()
+    {
+        return [
+            'css' => [
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css'
+            ],
+            'js' => [
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
+                'backend/library/location.js',
+                'backend/plugin/ckfinder/ckfinder.js',
+                'backend/library/finder.js'
+            ]
+        ];
+    }
 }
-
-}
-
-

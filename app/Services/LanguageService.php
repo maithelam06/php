@@ -142,34 +142,34 @@ class LanguageService implements LanguageServiceInterface
             return false;
         }
     }
-    // private function changeUserStatus($post, $value)
-    // {
-    //     DB::beginTransaction();
-    //     try {
-    //         $array = [];
-    //         if (isset($post['modelId'])) {
-    //             $array[] = $post['modelId'];
-    //         } else {
-    //             $array = $post['id'];
-    //         }
-    //         $payload[$post['field']] = $value;
-    //         $this->userRepository->updateByWhereIn('user_catalogue_id', $array,  $payload);
-    //         DB::commit();
-    //         return true;
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         // Log::error($e->getMessage());
-    //         echo $e->getMessage();
-    //         die();
-    //         return false;
-    //     }
-    // }
+    private function changeUserStatus($post, $value)
+    {
+        DB::beginTransaction();
+        try {
+            $array = [];
+            if (isset($post['modelId'])) {
+                $array[] = $post['modelId'];
+            } else {
+                $array = $post['id'];
+            }
+            $payload[$post['field']] = $value;
+            $this->languageRepository->updateByWhereIn('id', $array,  $payload);
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log::error($e->getMessage());
+            echo $e->getMessage();
+            die();
+            return false;
+        }
+    }
 
 
 
     //phân trang
     public function paginateSelect()
     {
-        return ['id', 'name', 'canonical', 'publish'];
+        return ['id', 'name', 'canonical', 'publish','image'];
     }
 }

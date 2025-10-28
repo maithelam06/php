@@ -1,5 +1,5 @@
 @include('backend.dashboard.component.breadcrumb', ['title' => $config['seo']['create']['title']])
-<form action="{{ route('user.catalogue.destroy', $language->id )}}" method="post" class="box">
+<form action="{{ route('language.destroy', $language->id )}}" method="post" class="box">
     @csrf
     @method('DELETE')
     <div class="wrapper wrapper-content animated fadeInRight">

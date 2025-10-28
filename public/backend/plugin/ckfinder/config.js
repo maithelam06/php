@@ -1,14 +1,11 @@
-/*
- Copyright (c) 2007-2024, CKSource Holding sp. z o.o. All rights reserved.
- For licensing, see LICENSE.html or https://ckeditor.com/sales/license/ckfinder
- */
+﻿/*
+Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
+For licensing, see LICENSE.html or http://ckfinder.com/license
+*/
 
-var config = {};
-
-// Set your configuration options below.
-
-// Examples:
-// config.language = 'pl';
-// config.skin = 'jquery-mobile';
-
-CKFinder.define( config );
+CKFinder.customConfig = function( config )
+{
+	// Define changes to default configuration here. For example:
+	// config.skin = 'v1';
+	// config.language = 'fr';
+};

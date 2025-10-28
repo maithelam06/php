@@ -4,7 +4,7 @@
             <th class="text-center" style="width: 40px;">
                 <input type="checkbox" id="checkAll" class="input-checkBox">
             </th>
-            <th style="width:90px" class="text-center">Ảnh</th>
+            <th style="width:100px">Ảnh</th>
             <th >Tên ngôn ngữ</th>
             <th >Canonical</th>
         
@@ -20,12 +20,8 @@
                     <td class="text-center">
                         <input type="checkbox" value="{{ $language->id }}" class="input-checkbox checkBoxItem">
                     </td>
-                    <td class="text-center">
-                        <span class="image img-cover" style="display: inline-block; width: 50px; height: 50px; overflow: hidden; border-radius: 50%;">
-                            <img src="https://imgt.taimienphi.vn/cf/Images/tt/2021/8/20/top-anh-dai-dien-dep-chat-39.jpg" 
-                                 alt="Avatar" 
-                                 style="width: 100%; height: 100%; object-fit: cover;">
-                        </span>
+                    <td>
+                        <span class="image img-cover"><img src="{{ $language->image }}" alt=""></span>
                     </td>
                     <td>{{ $language->name }}</td>
                     <td>{{ $language->canonical }}</td>

@@ -67,7 +67,10 @@
                                     </label>
                                     <input type="text" id="image" name="image"
                                            value="{{ old('image', $language->image ?? '') }}"
-                                           class="form-control" placeholder="Nhập tên nhóm" autocomplete="off">
+                                           class="form-control upload-image" placeholder="Nhập tên nhóm" autocomplete="off" 
+                                           data-type = "Images"
+                                           >
+                                           
                                 </div>
                             </div>
 
