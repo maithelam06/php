@@ -2,15 +2,15 @@
 
 namespace App\Services;
 
-use App\Services\Interfaces\UserCatalogueServiceInterface;
+use App\Services\Interfaces\LanguageServiceInterface;
 use PhpParser\Node\Expr\FuncCall;
-use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
-use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
+use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 
 
@@ -20,17 +20,14 @@ use Illuminate\Support\Facades\Hash;
  * Class UserCatlogueService
  * @package App\Services
  */
-class UserCatalogueService implements UserCatalogueServiceInterface
+class LanguageService implements LanguageServiceInterface
 {
-    protected $userCatalogueRepository;
-    protected $userRepository;
+    protected $languageRepository;
 
     public function __construct(
-        UserCatalogueRepository $userCatalogueRepository,
-        UserRepository $userRepository
+        LanguageRepository $languageRepository,
     ) {
-        $this->userCatalogueRepository = $userCatalogueRepository;
-        $this->userRepository = $userRepository;
+        $this->languageRepository = $languageRepository;
     }
 
     // Lấy danh sách bản ghi
@@ -41,15 +38,15 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         $condition['publish'] = $request->integer('publish');
         $perpage = $request->integer('perpage');
 
-        $userCatalogues = $this->userCatalogueRepository->pagination(
+        $languages = $this->languageRepository->pagination(
             $this->paginateSelect(),
             $condition,
             [],
-            ['path' => 'user/catalogue/index'],
+            ['path' => 'language/index'],
             $perpage,
-            ['users']
+            []
         );
-        return $userCatalogues;
+        return $languages;
     }
 
     //them moi bang ghi
@@ -58,8 +55,8 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         DB::beginTransaction();
         try {
             $payload = $request->except(['_token', 'send']);
-            $user = $this->userCatalogueRepository->create($payload);
-
+            $payload['user_id'] = Auth::id();
+            $language = $this->languageRepository->create($payload);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -79,7 +76,7 @@ class UserCatalogueService implements UserCatalogueServiceInterface
 
             $payload = $request->except(['_token', 'send']);
 
-            $user = $this->userCatalogueRepository->update($id, $payload);
+            $language = $this->languageRepository->update($id, $payload);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -96,7 +93,7 @@ class UserCatalogueService implements UserCatalogueServiceInterface
     {
         DB::beginTransaction();
         try {
-            $user = $this->userCatalogueRepository->delete($id);
+            $language = $this->languageRepository->delete($id);
 
             DB::commit();
             return true;
@@ -114,8 +111,8 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         DB::beginTransaction();
         try {
             $payload[$post['field']] = (($post['value'] == 1) ? 2 : 1);
-            $user = $this->userCatalogueRepository->update($post['modelId'], $payload);
-            $this->changeUserStatus($post,  $payload[$post['field']] );
+            $language = $this->languageRepository->update($post['modelId'], $payload);
+            // $this->changeUserStatus($post,  $payload[$post['field']]);
 
             DB::commit();
             return true;
@@ -133,8 +130,8 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         DB::beginTransaction();
         try {
             $payload[$post['field']] = $post['value'];
-            $flag = $this->userCatalogueRepository->updateByWhereIn('id', $post['id'], $payload);
-            $this->changeUserStatus($post,$post['value']);
+            $flag = $this->languageRepository->updateByWhereIn('id', $post['id'], $payload);
+            $this->changeUserStatus($post, $post['value']);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -145,33 +142,34 @@ class UserCatalogueService implements UserCatalogueServiceInterface
             return false;
         }
     }
-    private function changeUserStatus($post, $value)
-    {
-        DB::beginTransaction();
-        try {
-            $array = [];
-            if (isset($post['modelId'])) {
-                $array[] = $post['modelId'];
-            } else {
-                $array = $post['id'];
-            }
-            $payload[$post['field']] = $value;
-            $this->userRepository->updateByWhereIn('user_catalogue_id', $array,  $payload);
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            // Log::error($e->getMessage());
-            echo $e->getMessage();
-            die();
-            return false;
-        }
-    }
+    // private function changeUserStatus($post, $value)
+    // {
+    //     DB::beginTransaction();
+    //     try {
+    //         $array = [];
+    //         if (isset($post['modelId'])) {
+    //             $array[] = $post['modelId'];
+    //         } else {
+    //             $array = $post['id'];
+    //         }
+    //         $payload[$post['field']] = $value;
+    //         $this->userRepository->updateByWhereIn('user_catalogue_id', $array,  $payload);
+    //         DB::commit();
+    //         return true;
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         // Log::error($e->getMessage());
+    //         echo $e->getMessage();
+    //         die();
+    //         return false;
+    //     }
+    // }
+
 
 
     //phân trang
     public function paginateSelect()
     {
-        return ['id', 'name', 'description', 'publish'];
+        return ['id', 'name', 'canonical', 'publish'];
     }
 }

@@ -70,7 +70,7 @@ class UserCatalogueController extends Controller
 
     public function edit($id) {
         $userCatalogue = $this->userCatalogueRepository->findById($id);
-        $config['seo'] = config('apps.user');
+        $config['seo'] = config('apps.userCatalogue');
         $config['method'] = 'edit';
         $template = 'backend.user.catalogue.createandedit';
         return view('backend.dashboard.layout',compact(
@@ -88,7 +88,7 @@ class UserCatalogueController extends Controller
     }
 
     public function delete($id) {
-        $config['seo'] = config('apps.user');
+        $config['seo'] = config('apps.userCatalogue');
         $userCatalogue = $this->userCatalogueRepository->findById($id);
         $template = 'backend.user.catalogue.delete';
         return view('backend.dashboard.layout',compact(

@@ -1,0 +1,83 @@
+ Module: Post
+
+post_catalogues: lưu các nhóm bài viết (ví dụ: tin tức, thời sự, bóng đá, v.v.)
+
+posts: lưu chi tiết các bài viết (ví dụ: Messi ghi bàn, v.v.)
+
+post_catalogue_post: bảng pivot lưu quan hệ giữa post_catalogues và posts (quan hệ n–n)
+
+languages: lưu ngôn ngữ
+
+post_catalogue_languages: lưu quan hệ giữa post_catalogues và translates
+
+post_languages: lưu quan hệ giữa posts và translates (nếu có)
+
+n-n
+ Đa ngôn ngữ việt anh hafh nhật pháp
+
+
+ -languages :
+   +id
+   +name
+   + canonical
+   +image
+   +user_id
+   +delete_at
+
+ -post-catalogue: 
+  + id 
+  + parent_id : lưu mã của danh mục cha
+  + lft(giá trị bên trái của node )
+  + rgt(giá trị bên phải của node)
+  + level(cấp level của node)
+  + view lưu lượt xem danh mục
+  + canninical( đường dẫn truy caapj danh mục)
+  + image(nhr đại diện)
+  + icon anhr nhỏ
+  + album(danh sách ảnh) 
+  + delete_at xóa mềm
+  + publish trạng thái
+  + oder:  sắp xếp các danh mục
+  + user_id ng tạo ra danh mục
+
+
+ -post_catalogue_transate
+   -post_catalogue_id
+   - languages_id
+   - name (tên bài viết)
+   - description(mô tả ngắn)
+   - conten(nội dung của danh mục)
+   - meta_title tiêu dề seo 
+   - meta decsiption : mô tả seo
+   - meta_keyword : từ khóa seo
+-post :
+    - id
+    - post_catalogue_id
+    - album
+    - icon (video blog)
+    - view
+    - order
+    - publish
+    - delete_at
+    - user_id
+-post_catalogue_post :
+   - post_id
+   - languages_id
+   - viewed
+   - name (tên bài viết)
+   - description(mô tả ngắn)
+   - conten(nội dung của danh mục)
+   - meta_title tiêu dề seo 
+   - meta decsiption : mô tả seo
+   - meta_keyword : từ khóa seo
+      
+
+-post-catalogue
+
+
+nested_set quản lý phân nhánh như bên dưới
+
+                                 tin tức
+            bóng đá                     - thời sự - thời tiết -vv
+ bóng đá trong nước -     bóng đá quốc tế   
+ cúp quốc gia-vleague     ngoại hạng danh-league -1.vv
