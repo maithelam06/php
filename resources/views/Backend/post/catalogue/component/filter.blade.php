@@ -36,7 +36,7 @@
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('post.catalogue.create') }}" class="btn btn-danger"><i class="fa fa-plus"></i>Thêm mới ngôn ngữ</a>
+                    <a href="{{ route('post.catalogue.create') }}" class="btn btn-danger"><i class="fa fa-plus"></i>Thêm mới nhóm bài viết</a>
                 </div>
             </div>
         </div>

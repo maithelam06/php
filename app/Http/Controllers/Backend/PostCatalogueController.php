@@ -43,7 +43,7 @@ class PostCatalogueController extends Controller
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css'
             ]
         ];
-        $config['seo'] = config('apps.postcatalogue'); 
+        $config['seo'] = config('apps.postcatalogue');
         $template = 'backend.post.catalogue.index';
         return view('backend.dashboard.layout', compact(
             'template',
@@ -74,7 +74,7 @@ class PostCatalogueController extends Controller
 
     public function edit($id)
     {
-         $config = $this->configData();
+        $config = $this->configData();
         $postCatalogue = $this->postCatalogueRepository->findById($id);
         $config['seo'] = config('apps.postcatalogue');
         $config['method'] = 'edit';
@@ -115,13 +115,19 @@ class PostCatalogueController extends Controller
         return redirect()->route('post.catalogue.index')->with('error', 'Xóa bản ghi không thành công. Hãy thử lại sau');
     }
 
-    private function configData() {
+    private function configData()
+    {
         return [
             'js' => [
+                'backend/plugin/ckeditor/ckeditor.js',
                 'backend/plugin/ckfinder/ckfinder.js',
-                'backend/library/finder.js'
+                'backend/library/finder.js',
+                'backend/library/seo.js',
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js'
+            ],
+            'css' => [
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
             ]
         ];
-}
-
+    }
 }
