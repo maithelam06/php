@@ -16,8 +16,10 @@
                  Mô tả ngắn
              </label>
              <textarea type="text" name="description"
-                 value="{{ old('description', $postCatalogue->description ?? '') }}" class="form-control ck-editor"
-                 placeholder="" autocomplete="off" id="description" data-height="450"> </textarea>
+                 value="" class="form-control ck-editor"
+                 placeholder="" autocomplete="off" id="description" data-height="450"
+                 >
+                 {{ old('description', $postCatalogue->description ?? '') }}</textarea>
          </div>
      </div>
  </div>
@@ -27,8 +29,10 @@
              <label for="email" class="control-label text-left">
                  Nội dung
              </label>
-             <textarea type="text"name="content" value="{{ old('content', $postCatalogue->content ?? '') }}"
-                 class="form-control ck-editor" placeholder="Nhập tiêu đề nhóm bài viết" autocomplete="off" id="content" data-height="500"> </textarea>
+             <textarea type="text"name="content" 
+                 class="form-control ck-editor" placeholder="Nhập tiêu đề nhóm bài viết" autocomplete="off" id="content" data-height="500"
+                 >
+                 {{ old('content', $postCatalogue->content ?? '') }}</textarea>
          </div>
      </div>
  </div>

@@ -10,6 +10,8 @@ use App\Services\Interfaces\PostCatalogueServiceInterface as PostCatalogueServic
 use App\Repositories\Interfaces\PostCatalogueRepositoryInterface as PostCatalogueRepository;
 use App\Http\Requests\StorePostCatalogueRequest;
 use App\Http\Requests\UpdatePostCatalogueRequest;
+use App\Classes\Nestedsetbie;
+
 
 
 class PostCatalogueController extends Controller
@@ -26,6 +28,11 @@ class PostCatalogueController extends Controller
     ) {
         $this->postCatalogueService = $postCatalogueService;
         $this->postCatalogueRepository = $postCatalogueRepository;
+        $this->nestedset = New Nestedsetbie([
+            'table' => 'post_catalogues',
+            'foreignkey' => 'post_catalogue_id',
+            'language_id' => 1,
+        ]);
     }
     public function index(Request $request)
     {
@@ -57,10 +64,13 @@ class PostCatalogueController extends Controller
         $config = $this->configData();
         $config['seo'] = config('apps.user');
         $config['method'] = 'create';
+        $dropdown = $this->nestedset->Dropdown();
         $template = 'backend.post.catalogue.createandedit';
         return view('backend.dashboard.layout', compact(
             'template',
+            'dropdown',
             'config',
+        
         ));
     }
 

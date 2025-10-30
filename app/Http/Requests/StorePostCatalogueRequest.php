@@ -22,15 +22,15 @@ class StorePostCatalogueRequest extends FormRequest
    public function rules(): array
     {
         return [
-            'email' => 'required',
-            'user_catalogue_id' => 'gt:0',
+            'name' => 'required',
+            'canonical' => 'required|unique:post_catalogue_language',
         ];
     }
     public function messages(): array
     {
         return [
             'name.required' => 'Bạn chưa nhập vào ô tiêu đề',
-            'user_catalogue_id.gt' => 'Bạn chưa chọn danh mục trang',
+            'canonical.required' => 'Bạn chưa nhập vào đường dẫn',
         ];
     }
 }

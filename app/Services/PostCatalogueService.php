@@ -2,28 +2,38 @@
 
 namespace App\Services;
 
-use App\Services\Interfaces\PostCatalogueServiceInterface; 
+use App\Services\Interfaces\PostCatalogueServiceInterface;
+use App\Services\BaseService;
 use PhpParser\Node\Expr\FuncCall;
 use App\Repositories\Interfaces\PostCatalogueRepositoryInterface as PostCatalogueRepository;
+use Faker\Provider\Base;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Classes\Nestedsetbie;
 
 /**
  * Class UserCatlogueService
  * @package App\Services
  */
-class PostCatalogueService implements PostCatalogueServiceInterface
+class PostCatalogueService extends BaseService implements PostCatalogueServiceInterface
 {
     protected $postCatalogueRepository;
+    protected $nestedset;
 
     public function __construct(
         PostCatalogueRepository $postCatalogueRepository,
+
     ) {
         $this->postCatalogueRepository = $postCatalogueRepository;
+        $this->nestedset = New Nestedsetbie([
+            'table' => 'post_catalogues',
+            'foreignkey' => 'post_catalogue_id',
+            'language_id' => $this->currentLanguage(),
+        ]);
     }
 
     // Lấy danh sách bản ghi
@@ -36,10 +46,15 @@ class PostCatalogueService implements PostCatalogueServiceInterface
         $postCatalogues = $this->postCatalogueRepository->pagination(
             $this->paginateSelect(),
             $condition,
-            [],
-            ['path' => 'language/index'],
+            [
+                ['post_catalogue_language as tb2','tb2.post_catalogue_id', '=' ,'post_catalogues.id']
+            ],
+            ['path' => 'post.catalogue.index'],
             $perpage,
-            []
+            [],
+            [
+                'post_catalogues.lft' , 'ASC'
+            ]
         );
         return $postCatalogues;
     }
@@ -49,9 +64,25 @@ class PostCatalogueService implements PostCatalogueServiceInterface
     {
         DB::beginTransaction();
         try {
-            $payload = $request->except(['_token', 'send']);
+            $payload = $request->only($this->payload());
+
+            // dd($payload);
             $payload['user_id'] = Auth::id();
             $postCatalogue = $this->postCatalogueRepository->create($payload);
+            if ($postCatalogue->id > 0) {
+                $payloadLanguage = $request->only($this->payloadLanguage());
+                $payloadLanguage['language_id'] = $this->currentLanguage();
+                $payloadLanguage['post_catalogue_id'] = $postCatalogue->id;
+
+                $language = $this->postCatalogueRepository->createLanguagePivot($postCatalogue, $payloadLanguage);
+
+                // dd($language);
+            }
+            $this->nestedset->Get('level ASC, order ASC');
+            $this->nestedset->Recursive(0, $this->nestedset->Set());
+            $this->nestedset->Action();
+
+
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -160,6 +191,37 @@ class PostCatalogueService implements PostCatalogueServiceInterface
     //phân trang
     public function paginateSelect()
     {
-        return ['id', 'name', 'canonical', 'publish','image'];
+        return [
+            'post_catalogues.id',
+            'post_catalogues.publish',
+            'post_catalogues.image',
+            'post_catalogues.level',
+            'post_catalogues.order',
+            'tb2.name',
+            'tb2.canonical',
+            
+        ];
+    }
+
+    private function payload()
+    {
+        return [
+            'parent_id',
+            'follow',
+            'publish',
+            'image'
+        ];
+    }
+    private function payloadLanguage()
+    {
+        return [
+            'name',
+            'description',
+            'content',
+            'meta_title',
+            'meta_keyword',
+            'meta_description',
+            'canonical'
+        ];
     }
 }

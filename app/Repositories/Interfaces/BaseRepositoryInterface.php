@@ -18,7 +18,10 @@ interface BaseRepositoryInterface
                 array $join = [],
                 array $extend = [],
                 int $perpage = 1,
-                 array $relation = []
+                 array $relation = [],
+                 array $orderBy = [],
         );
         public function updateByWhereIn( string $whereInField = '', array $WhereIn = [],  array $payload = []);
+
+         public function createLanguagePivot($model , array $payload = []);
 }

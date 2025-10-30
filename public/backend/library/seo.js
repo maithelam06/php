@@ -22,11 +22,13 @@
         })
 
 
-       $('textarea[name= meta-description]').on('keyup', function () {
+       $('textarea[name=meta_description]').on('keyup', function () {
             let input = $(this)
             let value = $(input).val()
-            $('.meta-description').html(value)
+            $('.meta_description').html(value)
         })
+
+       
 
     }
     $(document).ready(function () {

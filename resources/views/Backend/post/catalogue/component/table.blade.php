@@ -4,28 +4,19 @@
             <th class="text-center" style="width: 40px;">
                 <input type="checkbox" id="checkAll" class="input-checkBox">
             </th>
-            <th style="width:100px">Ảnh</th>
-            <th >Tên ngôn ngữ</th>
-            <th >Canonical</th>
-        
-            <th>Mô Tả</th>
+            <th >Tên Nhóm</th>
             <th class="text-center" style="width: 120px;">Tình trạng</th>
             <th class="text-center" style="width: 120px;">Thao Tác</th>
         </tr>
     </thead>
     <tbody>
-        @if(isset($languages) && $postCatalogues->count() > 0)
-            @foreach ($languages as $postCatalogue)
+        @if(isset($postCatalogues) && is_object($postCatalogues))
+            @foreach ($postCatalogues as $postCatalogue)
                 <tr>
                     <td class="text-center">
                         <input type="checkbox" value="{{ $postCatalogue->id }}" class="input-checkbox checkBoxItem">
                     </td>
-                    <td>
-                        <span class="image img-cover"><img src="{{ $postCatalogue->image }}" alt=""></span>
-                    </td>
-                    <td>{{ $postCatalogue->name }}</td>
-                    <td>{{ $postCatalogue->canonical }}</td>
-                    <td>{{ $postCatalogue->description }}</td>
+                    <td>{{  str_repeat('|-----', (($postCatalogue->level > 0) ? ($postCatalogue->level - 1) : 0)) . $postCatalogue->name }}</td>
                     <td class="text-center js-switch-{{ $postCatalogue->id }}">
                         <input type="checkbox" 
                                value="{{ $postCatalogue->publish }}" 
@@ -36,12 +27,12 @@
                                {{ $postCatalogue->publish == 2 ? 'checked' : '' }}>
                     </td>
                     <td class="text-center">
-                        <a href="{{ route('language.edit', $postCatalogue->id) }}" 
+                        <a href="{{ route('post.catalogue.edit', $postCatalogue->id) }}" 
                            class="btn btn-success btn-sm" 
                            title="Sửa">
                            <i class="fa fa-edit"></i>
                         </a>
-                        <a href="{{ route('language.delete', $postCatalogue->id) }}" 
+                        <a href="{{ route('post.catalogue.delete', $postCatalogue->id) }}" 
                            class="btn btn-danger btn-sm" 
                            title="Xóa" 
                            onclick="return confirm('Bạn có chắc muốn xóa thành viên này?')">

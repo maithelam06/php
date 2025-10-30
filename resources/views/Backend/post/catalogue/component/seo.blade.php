@@ -5,13 +5,13 @@
                     <div class="ibox-content">
                         <div class="seo-container">
                             <div class="meta-title">
-                               Bạn chưa có tiêu đề SEO
+                               {{ (old('meta_title')) ?? 'Bạn chưa có tiêu đề SEO' }}
                             </div>
                             <div class="canonical">
-                                Https://duong-dan-cua-ban.html
+                                {{ (old('canonical')) ? config('app.url').old('canonical').config('apps.general.suffix') : 'https://duong-dan-cuan-ban' }}
                             </div>
-                            <div class="meta-description">
-                                Bạn chưa có mô tả SEO
+                            <div class="meta_description">
+                               {{ (old('meta_description')) ?? 'Bạn chưa có tiêu đề SEO' }}
                             </div>
                         </div>
                         <div class="seo-swrapper">
@@ -52,14 +52,13 @@
                                     <label for="email" class="control-label text-left">
                                         <div class="uk-flex uk-flex-middle uk-flex-space-between">
                                             <span> Mô tả SEO </span>
-                                            <span class="meta-description">0 ký tự</span>
+                                            <span class="count_meta-description">0 ký tự</span>
                                         </div>
                                     </label>
-                                    <textarea type="text" id="name" name="meta-description"
-                                        value="{{ old('description', $postCatalogue->description ?? '') }}" class="form-control"
+                                    <textarea type="text"name="meta_description"
+                                         class="form-control"
                                         placeholder="" autocomplete="off"
-                                        >
-                                    </textarea>
+                                        >{{ old('meta_description', $postCatalogue->meta_description ?? '') }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -68,7 +67,7 @@
                                     <div class="form-row">
                                         <label for="email" class="control-label text-left">
                                             <div class="uk-flex uk-flex-middle uk-flex-space-between">
-                                                <span> Đường dẫn </span>
+                                                <span> Đường dẫn <span class="text-danger">*</span> </span>
                                                 <span class="count_meta-title">0 ký tự</span>
                                             </div>
                                         </label>
