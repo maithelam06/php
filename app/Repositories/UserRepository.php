@@ -35,7 +35,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         array $join = [],
         array $extend = [],
         int $perpage = 1,
-        array  $relation = []
+        array  $relation = [],
+        array $orderBy = []
         
     ) {
       

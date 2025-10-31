@@ -26,7 +26,7 @@ class BaseRepository implements BaseRepositoryInterface
         array $extend = [],
         int $perpage = 1,
         array $relations = [],
-        array $orderBy = []
+        array $orderBy = ['id' , 'DESC']
     ){
         $query = $this->model
             ->select($column)

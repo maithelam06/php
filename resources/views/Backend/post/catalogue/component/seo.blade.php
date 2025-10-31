@@ -73,7 +73,7 @@
                                         </label>
                                         <div class="input-wrapper">
                                             <input type="text" id="canonical" name="canonical"
-                                            value="{{ old('canonical', $postCatalogue->canonicalse ?? '') }}" class="form-control"
+                                            value="{{ old('canonical', $postCatalogue->canonical ?? '') }}" class="form-control"
                                             placeholder="" autocomplete="off">
                                             <span class="baseUrl">{{ config('app.url') }}</span>
                                         </div>

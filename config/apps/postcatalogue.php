@@ -8,6 +8,9 @@ return [
     'create' => [
         'title' => 'Thêm mới nhóm bài viết',
     ],
+    'edit' => [
+        'title' => 'Cập Nhật nhóm bài viết',
+    ],
     'delete' => [
         'title' => 'Xóa nhóm bài viết',
     ],

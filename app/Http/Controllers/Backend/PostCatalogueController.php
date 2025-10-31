@@ -18,6 +18,7 @@ class PostCatalogueController extends Controller
 {
     protected $postCatalogueService;
     protected $postCatalogueRepository;
+    protected $language;
 
 
 
@@ -28,11 +29,12 @@ class PostCatalogueController extends Controller
     ) {
         $this->postCatalogueService = $postCatalogueService;
         $this->postCatalogueRepository = $postCatalogueRepository;
-        $this->nestedset = New Nestedsetbie([
+        $this->nestedset = new Nestedsetbie([
             'table' => 'post_catalogues',
             'foreignkey' => 'post_catalogue_id',
             'language_id' => 1,
         ]);
+        $this->language = $this->currentLanguage();
     }
     public function index(Request $request)
     {
@@ -70,7 +72,7 @@ class PostCatalogueController extends Controller
             'template',
             'dropdown',
             'config',
-        
+
         ));
     }
 
@@ -84,14 +86,23 @@ class PostCatalogueController extends Controller
 
     public function edit($id)
     {
+        
+        $postCatalogue = $this->postCatalogueRepository->getPostCatalogueById($id, $this->language);
+        
+        
+
+
+
+
         $config = $this->configData();
-        $postCatalogue = $this->postCatalogueRepository->findById($id);
         $config['seo'] = config('apps.postcatalogue');
         $config['method'] = 'edit';
+        $dropdown = $this->nestedset->Dropdown();
         $template = 'backend.post.catalogue.createandedit';
         return view('backend.dashboard.layout', compact(
             'template',
             'config',
+            'dropdown',
             'postCatalogue'
         ));
     }
